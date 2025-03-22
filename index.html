@@ -10,43 +10,91 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         section {
-            max-width: 1000px;  margin-right: auto;  margin-left: auto;  padding-top: 100px;
+            max-width: 1000px;
+            margin-right: auto;
+            margin-left: auto;
+            padding-top: 100px;
         }
+
         .calculatorWrapper {
-            background-color: burlywood; border-radius: 10px; max-width: 350px;   margin-left: auto; margin-right: auto; padding: 10px; height: 530px;
+            background-color: burlywood;
+            border-radius: 10px;
+            max-width: 350px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10px;
+            height: 545px;
         }
+
         .firstFlex {
-            display: flex; justify-content: space-between;
+            display: flex;
+            justify-content: space-between;
         }
+
         .flexItems {
-            display: flex; gap: 1em; justify-content: start; align-items: center;
+            display: flex;
+            gap: 1em;
+            justify-content: start;
+            align-items: center;
         }
+
         .flexItems2 {
-            display: flex;  gap: 1.5em;  align-items: center;
+            display: flex;
+            gap: 1.5em;
+            align-items: center;
         }
+
         .secondFlex {
-            display: flex; justify-content: space-between;  align-items: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
+
         .flex-items {
-            display: flex; align-items: center; gap: 1em;
+            display: flex;
+            align-items: center;
+            gap: 1em;
         }
+
         .inputWrapper {
-            display: flex; flex-direction: column; gap: 1em;
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
         }
-        .inputWrapper input{
-            float: left; text-align: end; height: 30px; border-radius: 10px; outline: none; border: none; background-color: gainsboro;
+
+        .inputWrapper input {
+            float: left;
+            text-align: end;
+            height: 30px;
+            border-radius: 10px;
+            outline: none;
+            border: none;
+            background-color: gainsboro;
         }
-        .flexBox{
-            display: flex; justify-content: space-between; padding: 10px 20px;
+
+        .flexBox {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
         }
-        .gridbox{
-            display: grid;  grid-template-columns: 1fr 1fr 1fr 1fr; grid-column-gap: 10px; grid-row-gap: 10px;
+
+        .gridbox {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            grid-column-gap: 10px;
+            grid-row-gap: 10px;
         }
-        .gridbox button{
-         padding: 10px 20px; border-radius: 5px; border: none; background-color: gainsboro; font-size: 16px;
+
+        .gridbox button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: gainsboro;
+            font-size: 16px;
         }
     </style>
 </head>
+
 <body>
     <section>
         <div class="calculatorWrapper">
@@ -85,10 +133,12 @@
                 <button onclick="displayValue('%')">%</button>
                 <button onclick="clearDisplay()">CE</button>
                 <button onclick="clearInput()">C</button>
-                <button  onclick="clearSinglevalue()"><i class="fa-solid fa-delete-left" style="color: #080808;"></i></button>
+                <button onclick="clearSinglevalue()"><i class="fa-solid fa-delete-left"
+                        style="color: #080808;"></i></button>
                 <button onclick="displayValue('1/')">1/x</button>
                 <button onclick="displayValue('^')">x^2</button>
-                <button onclick="displayValue('√')"> <i class="fa-solid fa-square-root-variable" style="color: #161717;"></i></button>
+                <button onclick="displayValue('√')"> <i class="fa-solid fa-square-root-variable"
+                        style="color: #161717;"></i></button>
                 <button onclick="displayValue('/')"><i class="fa-solid fa-divide" style="color: #111212;"></i></button>
                 <button onclick="displayNumber(7)">7</button>
                 <button onclick="displayNumber(8)">8</button>
@@ -110,116 +160,93 @@
         </div>
     </section>
 </body>
-
 <script>
+    let firstNumber; //it will show undefined if you log it out 
+    let operation = '';
+    let canClear = false;
+    let firstInput = document.getElementById('secondInput');//it is not neccessary that you get element by id in input
+    let secondInput = document.getElementById('firstInput');
+    let decimalValue = '';
+    function displayNumber(number) {
+        if (canClear) { //any if statement is always true
+            firstInput.value = ''; //this is setting the input back to factory effect
+            canClear = false;
+        }
+        firstInput.value += number;
+    };
 
+    function displayValue(operator) {
+        firstNumber = firstInput.value; // storing the above function in variable so we can reuse it
+        operation = operator;
+        canClear = true;
+        secondInput.value = firstNumber + operation;
+    };
 
-let firstNumber; //it will show undefined if you log it out 
-let operation = ''; 
-let canClear = false;
-let firstInput = document.getElementById('secondInput');//it is not neccessary that you get element by id in input
-let secondInput = document.getElementById('firstInput');
-let decimalValue = '';
-function displayNumber(number){
+    function calculateValue() {
 
-    
-    if(canClear){ //any if statement is always true
-        firstInput.value = ''; //this is setting the input back to factory effect
-        canClear = false;
+        if (operation === '+') {
+            secondInput.value = firstNumber + ' + ' + firstInput.value + ' =';
+            firstInput.value = Number(firstNumber) + Number(firstInput.value);
+        }
+        else if (operation === 'x') {
+            secondInput.value = firstNumber + '  *  ' + firstInput.value + ' = ';
+            firstInput.value = Number(firstNumber) * Number(firstInput.value);
+        }
+        else if (operation === '/') {
+            secondInput.value = firstNumber + ' / ' + firstInput.value + ' =';
+            firstInput.value = Number(firstNumber) / Number(firstInput.value);
+        }
 
-    }
-    firstInput.value += number; 
+        else if (operation === '-') {
+            secondInput.value = firstNumber + ' - ' + firstInput.value + ' =';
+            firstInput.value = Number(firstNumber) - Number(firstInput.value);
+        }
+        else if (operation === '1/') {
+            value = firstInput.value;
+            secondInput.value = ` 1/ ${value} =`;
+            firstInput.value = 1 / Number(firstInput.value);
+        }
 
-};
-
-
-function displayValue(operator) {
-    firstNumber = firstInput.value; // storing the above function in variable so we can reuse it
-    operation = operator;
-    canClear = true;
-    secondInput.value = firstNumber + operation;
-};
-
-
-
-function calculateValue() {
-
-    if(operation === '+'){
-        secondInput.value =  firstNumber + ' + ' + firstInput.value + ' =';
-        firstInput.value = Number(firstNumber) + Number(firstInput.value);
-    }
-    else if(operation === 'x'){
-        secondInput.value = firstNumber  + '  *  ' + firstInput.value + ' = ';
-        firstInput.value = Number(firstNumber) * Number(firstInput.value);
-    }
-    else if(operation === '/'){
-        secondInput.value = firstNumber + ' / ' + firstInput.value + ' =' ;
-        firstInput.value = Number(firstNumber) / Number(firstInput.value);
-    }
-
-    else if(operation === '-'){
-        secondInput.value = firstNumber + ' - ' + firstInput.value + ' =' ;
-        firstInput.value = Number(firstNumber) - Number(firstInput.value);
-    }
-    else if(operation === '1/'){
-        value = firstInput.value;
-        secondInput.value = ` 1/ ${value} =` ;
-        firstInput.value = 1 / Number(firstInput.value);
-    }
-
-    else if(operation === '√'){
-
-        let numberr = Number(firstInput.value);
-        
+        else if (operation === '√') {
+            let numberr = Number(firstInput.value);
             secondInput.value = ' √' + firstInput.value + '=';
             firstInput.value = Math.sqrt(numberr);
-            console.log ( firstInput.value);
-        
-        // secondInput.value = ' √' + firstInput.value;
-        // console.log(secondInput );
-        
-        // firstInput.value = Math.sqrt(vallue);
+            console.log(firstInput.value);
+            // secondInput.value = ' √' + firstInput.value;
+            // console.log(secondInput );
 
-        // console.log(firstInput.value);
-        
+            // firstInput.value = Math.sqrt(vallue);
 
-    }
-    else if(operation === '%'){
-        secondInput.value = firstNumber + '%' + firstInput.value + '=';
-        firstInput.value = Number(firstNumber) % Number(firstInput.value);
-    }
+            // console.log(firstInput.value);
 
-    else if(operation === '^'){
-        secondInput.value = firstNumber + '^' + firstInput.value + '=';
-        firstInput.value = Number(firstNumber) ** Number(firstInput.value);
+        }
+        else if (operation === '%') {
+            secondInput.value = firstNumber + '%' + firstInput.value + '=';
+            firstInput.value = Number(firstNumber) % Number(firstInput.value);
+        }
+        else if (operation === '^') {
+            secondInput.value = firstNumber + '^' + firstInput.value + '=';
+            firstInput.value = Number(firstNumber) ** Number(firstInput.value);
+        }
 
+    };
+    function clearDisplay() {
+        document.getElementById('secondInput').value = '';
+        document.getElementById('firstInput').value = '';
+    };
 
-    }
+    function clearInput() {
+        document.getElementById('secondInput').value = '';
 
-}
+    };
 
-
-
-function clearDisplay() {
-    document.getElementById('secondInput').value = '';
-    document.getElementById('firstInput').value = '';
-}
-
-
-function clearInput() {
-    document.getElementById('secondInput').value = '';
-    
-}
-
-function clearSinglevalue() {
-    let firstInput = document.getElementById('secondInput');
-
-    let clear = firstInput.value;
-
-    if(clear.length > 0){
-        firstInput.value = clear.slice(0, -1);
-    }
-}
+    function clearSinglevalue() {
+        let firstInput = document.getElementById('secondInput');
+        let clear = firstInput.value;
+        if (clear.length > 0) {
+            firstInput.value = clear.slice(0, -1);
+        }
+    };
 </script>
 
 </html>
